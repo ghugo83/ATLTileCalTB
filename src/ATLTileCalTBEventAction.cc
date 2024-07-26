@@ -57,6 +57,17 @@ ATLTileCalTBEventAction::ATLTileCalTBEventAction(ATLTileCalTBPrimaryGenAction* p
 ATLTileCalTBEventAction::~ATLTileCalTBEventAction() {
 }
 
+void ATLTileCalTBEventAction::Add( std::size_t index, G4double de ) { 
+	//fAux[index] += de; 
+	
+	if (index == 0) {
+		auto analysisManager = G4AnalysisManager::Instance();
+		analysisManager->FillNtupleDColumn(0, de); 
+
+		SpectrumAnalyzer::GetInstance()->FillEventFields();
+	}
+}
+
 //BeginOfEvent() method
 //
 void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event* event) {
@@ -99,12 +110,17 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
 
     auto analysisManager = G4AnalysisManager::Instance();
 
-    G4int counter = 0;
+    /*G4int counter = 0;
     for ( auto& value : fAux ){ 
-        analysisManager->FillNtupleDColumn( counter, value );    
+        analysisManager->FillNtupleDColumn( counter, value ); 
+	if (counter == 0) {
+		G4cout << "ATLTileCalTBEventAction::EndOfEventAction: Call FillNtupleDColumn with value = " << value << G4endl;
+		}
         counter++;
-    }
+    }*/
 
+
+    
     //Method to convolute signal for PMT response
     //From https://gitlab.cern.ch/allpix-squared/allpix-squared/-/blob/86fe21ad37d353e36a509a0827562ab7fadd5104/src/modules/CSADigitizer/CSADigitizerModule.cpp#L271-L283
     auto ConvolutePMT = [](const std::array<G4double, ATLTileCalTBConstants::frames>& sdep) {
@@ -206,10 +222,14 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
     analysisManager->FillNtupleFColumn(7, fPrimaryGenAction->GetParticlenGun()->GetParticleEnergy());
 
     analysisManager->AddNtupleRow();
-    
+     
+
+
+    /*
     #ifdef ATLTileCalTB_LEAKANALYSIS
     SpectrumAnalyzer::GetInstance()->FillEventFields();
     #endif
+    */
 } 
 
 //**************************************************

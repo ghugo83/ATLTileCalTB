@@ -59,7 +59,6 @@ class ATLTileCalTBEventAction : public G4UserEventAction {
         #endif
 };
                      
-inline void ATLTileCalTBEventAction::Add( std::size_t index, G4double de ) { fAux[index] += de; }
 
 #endif //ATLTileCalTBEventAction_h
 

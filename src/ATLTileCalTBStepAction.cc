@@ -29,10 +29,13 @@ void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
     //Collect out of world leakage
     //
     if ( !aStep->GetTrack()->GetNextVolume() ){
-        fEventAction->Add( 0, aStep->GetTrack()->GetKineticEnergy() ); 
+	    //G4cout << "ATLTileCalTBStepAction::UserSteppingAction aStep->GetTrack()->GetKineticEnergy() = " << aStep->GetTrack()->GetKineticEnergy() << G4endl;
+        
         #ifdef ATLTileCalTB_LEAKANALYSIS
         SpectrumAnalyzer::GetInstance()->Analyze(aStep);
         #endif
+
+	fEventAction->Add( 0, aStep->GetTrack()->GetKineticEnergy() ); 
     }
 
     if ( aStep->GetTrack()->GetTouchableHandle()->GetVolume()->GetName() != "CALO::CALO" ||
