@@ -48,9 +48,16 @@ class SpectrumAnalyzer
       neutronScore = 0.;
       protonScore = 0., pionScore = 0., gammaScore = 0., electronScore = 0., othersScore = 0.;
     }
-    void FillEventFields() const;
-    // Step-wise methods
-    void Analyze(const G4Step* step);
+	void FillEventFields() const;
+	// Step-wise methods
+	void Analyze(const G4Step* step);
+
+	G4double getNeutronScore() const { return neutronScore; }
+	G4double getProtonScore() const { return protonScore; }
+	G4double getPionScore() const { return pionScore; }
+	G4double getGammaScore() const { return gammaScore; }
+	G4double getElectronScore() const { return electronScore; }
+	G4double getOthersScore() const { return othersScore; }
 
   private:
     // Members

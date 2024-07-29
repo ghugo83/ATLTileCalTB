@@ -115,7 +115,9 @@ void ATLTileCalTBRunAction::EndOfRunAction(const G4Run* /*run*/) {
     auto analysisManager = G4AnalysisManager::Instance();
     analysisManager->Write();
     analysisManager->CloseFile();
-    
+    if (!G4Threading::IsMasterThread()) {
+	    fEventAction->EndOfRun();
+    }
 }
 
 //**************************************************

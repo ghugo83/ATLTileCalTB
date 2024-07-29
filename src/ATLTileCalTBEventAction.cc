@@ -52,6 +52,8 @@ ATLTileCalTBEventAction::ATLTileCalTBEventAction(ATLTileCalTBPrimaryGenAction* p
       fAux{0., 0.} {
     fEdepVector = std::vector<G4double>(fNoOfCells, 0.);
     fSdepVector = std::vector<G4double>(fNoOfCells, 0.);
+    histoManager_ = FinalStateHistoManager();
+    histoManager_.Book();
 }
 
 ATLTileCalTBEventAction::~ATLTileCalTBEventAction() {
@@ -74,6 +76,8 @@ void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event*
     #ifdef ATLTileCalTB_LEAKANALYSIS
     SpectrumAnalyzer::GetInstance()->ClearEventFields();
     #endif
+    histoManager_.BeginOfEvent();
+    //G4cout << "histoManager_.BeginOfEvent()" << G4endl;
 }
 
 //GetHitsCollection method()
@@ -101,7 +105,11 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
 
     G4int counter = 0;
     for ( auto& value : fAux ){ 
-        analysisManager->FillNtupleDColumn( counter, value );    
+        analysisManager->FillNtupleDColumn( counter, value );
+	// HERE
+	if (counter == 0) {
+	histoManager_.ScoreSecondary(counter, "total", value); 
+} 
         counter++;
     }
 
@@ -207,9 +215,25 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
 
     analysisManager->AddNtupleRow();
     
+    auto specAnalyzer = SpectrumAnalyzer::GetInstance();
+
     #ifdef ATLTileCalTB_LEAKANALYSIS
-    SpectrumAnalyzer::GetInstance()->FillEventFields();
+    specAnalyzer->FillEventFields();
     #endif
+
+    // HERE
+    histoManager_.ScoreSecondary(1, "neutron", specAnalyzer->getNeutronScore()); 
+    histoManager_.ScoreSecondary(2, "proton", specAnalyzer->getProtonScore());
+    histoManager_.ScoreSecondary(3, "pion", specAnalyzer->getPionScore()); 
+    histoManager_.ScoreSecondary(4, "gamma", specAnalyzer->getGammaScore());
+    histoManager_.ScoreSecondary(5, "electron", specAnalyzer->getElectronScore()); 
+    histoManager_.ScoreSecondary(6, "others", specAnalyzer->getOthersScore()); 
+
+    histoManager_.EndOfEvent();
 } 
 
 //**************************************************
+
+void ATLTileCalTBEventAction::EndOfRun() {
+	histoManager_.EndOfRun();
+}

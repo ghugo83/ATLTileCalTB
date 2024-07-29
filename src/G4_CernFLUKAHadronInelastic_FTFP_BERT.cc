@@ -86,6 +86,7 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   fluka_interface::initialize(activateCoalescence, activateHeavyFragmentsEvaporation);
 }
 
+
 #endif  // G4_USE_FLUKA
 
 //**************************************************
