@@ -87,7 +87,12 @@ void ATLTileCalTBRunAction::BeginOfRunAction(const G4Run* run) {
     auto analysisManager = G4AnalysisManager::Instance();
 
     std::string runnumber = std::to_string( run->GetRunID() );
-    G4String fileName = "ATLTileCalTBout_Run" + runnumber + ".root";
+    //G4String fileName = "ATLTileCalTBout_Run" + runnumber + ".root";
+
+    G4String fileName = "FTFP_BERT.root";
+#ifdef G4_USE_FLUKA
+	    fileName = "FLUKA.root";
+#endif
     analysisManager->OpenFile(fileName);
 
     //Print useful information

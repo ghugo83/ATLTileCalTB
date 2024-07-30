@@ -46,7 +46,15 @@ class SpectrumAnalyzer
     inline void ClearEventFields()
     {
       neutronScore = 0.;
-      protonScore = 0., pionScore = 0., gammaScore = 0., electronScore = 0., othersScore = 0.;
+      antiNeutronScore = 0.;
+      protonScore = 0.;
+      antiProtonScore = 0.;
+      pionPlusScore = 0.;
+      pionMinusScore = 0.;
+      electronScore = 0.;
+      positronScore = 0.;
+      gammaScore = 0.;
+      othersScore = 0.;
     }
     void FillEventFields() const;
     // Step-wise methods
@@ -61,10 +69,14 @@ class SpectrumAnalyzer
     G4String scorerName{};
     // Event-wise members
     G4double neutronScore;
+	G4double antiNeutronScore;
     G4double protonScore;
-    G4double pionScore;
-    G4double gammaScore;
+	G4double antiProtonScore;
+    G4double pionPlusScore;
+	G4double pionMinusScore;
     G4double electronScore;
+	G4double positronScore;
+    G4double gammaScore;
     G4double othersScore;
 
     // Scoring quantities
