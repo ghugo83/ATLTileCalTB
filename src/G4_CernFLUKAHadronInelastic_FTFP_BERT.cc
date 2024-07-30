@@ -33,7 +33,7 @@ FLUKA interface included in geant4-11.1.ref05.
 #  include "globals.hh"
 
 #  include <iomanip>
-// #include "G4HadronPhysicsFTFP_BERT.hh" //replaced by FLUKAHadronInelasticPhysics.hh
+//#include "G4HadronPhysicsFTFP_BERT.hh" //replaced by FLUKAHadronInelasticPhysics.hh
 
 // Includers from FLUKA interface
 //
@@ -64,7 +64,7 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   RegisterPhysics(new G4HadronElasticPhysics(ver));
 
   // Hadron Physics
-  // RegisterPhysics(  new G4HadronPhysicsFTFP_BERT(ver));
+  //RegisterPhysics(new G4HadronPhysicsFTFP_BERT(ver));
   RegisterPhysics(new FLUKAHadronInelasticPhysics(ver));
 
   // Stopping Physics
