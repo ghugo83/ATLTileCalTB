@@ -55,7 +55,9 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   RegisterPhysics(new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
-  RegisterPhysics(new G4EmExtraPhysics(ver));
+  auto emPhys = new G4EmExtraPhysics(ver);
+  emPhys->GammaNuclear(false);
+  RegisterPhysics(emPhys);
 
   // Decays
   RegisterPhysics(new G4DecayPhysics(ver));
