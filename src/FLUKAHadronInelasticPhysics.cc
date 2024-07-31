@@ -135,19 +135,19 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
 
 
   // PROTON
-  /*build_G4_process_helpers::buildInelasticProcess(G4Proton::Proton(),
+  build_G4_process_helpers::buildInelasticProcess(G4Proton::Proton(),
                                                   helper,
                                                   flukaInelasticScatteringXS,
-                                                  flukaModel);*/
+                                                  flukaModel);
 	
   // DEBUG: CHERRY PICK G4 XS INSTEAD
-  auto protonInelasticProcess = new G4HadronInelasticProcess("protonInelastic", G4Proton::Proton());
+  /*auto protonInelasticProcess = new G4HadronInelasticProcess("protonInelastic", G4Proton::Proton());
   helper->RegisterProcess(protonInelasticProcess, G4Proton::Proton());	
     //protonInelasticProcess->AddDataSet(flukaInelasticScatteringXS);
     auto BGG = new G4BGGNucleonInelasticXS(G4Proton::Proton());
     protonInelasticProcess->AddDataSet(BGG);
 
-    protonInelasticProcess->RegisterMe(flukaModel);
+    protonInelasticProcess->RegisterMe(flukaModel);*/
     // IMPORTANT NB: BERTINI IS MISSING IN THE G4 CHERRY-PICK!!
     //auto theModel = new G4TheoFSGenerator("FTFP");
     //auto theStringModel = new G4FTFModel();
@@ -185,19 +185,18 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
   const auto neutronInelasticProcess = new G4HadronInelasticProcess("neutronInelastic", neutron);
   // NB: No XS is set by default in the G4HadronInelasticProcess constructor.
   helper->RegisterProcess(neutronInelasticProcess, neutron);
+  const auto flukaNeutronModel = new FLUKANuclearInelasticModel();
+  neutronInelasticProcess->RegisterMe(flukaNeutronModel);
 
   // Also non-HP: FLUKA neutron inelastic
   // IMPORTANT NB: Since flukaInelasticScatteringXS is SetForAllAtomsAndEnergies,
   // it needs to be set first (would erase any previously defined dataset, 
   // see G4CrossSectionDataStore::AddDataSet).
-
-  //neutronInelasticProcess->AddDataSet(flukaInelasticScatteringXS);
+  neutronInelasticProcess->AddDataSet(flukaInelasticScatteringXS);
   // DEBUG: CHERRY PICK G4 XS INSTEAD
-  neutronInelasticProcess->AddDataSet(new G4NeutronInelasticXS());
-  const auto flukaNeutronModel = new FLUKANuclearInelasticModel();
-  neutronInelasticProcess->RegisterMe(flukaNeutronModel);
+  //neutronInelasticProcess->AddDataSet(new G4NeutronInelasticXS());
   
-
+  
 
   // TO DO: Not elegant to have G4 neutron capture and fission included in FLUKA inelastic. 
   // Create a Physics constructor just for it? 
@@ -242,25 +241,25 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
 
 
   // PI+, PI-
-  /*build_G4_process_helpers::buildInelasticProcess(G4PionPlus::PionPlus(),
+  build_G4_process_helpers::buildInelasticProcess(G4PionPlus::PionPlus(),
                                                   helper,
                                                   flukaInelasticScatteringXS,
-                                                  flukaModel);*/
+                                                  flukaModel);
   // DEBUG: CHERRY PICK G4 XS INSTEAD
-  auto pionPlusInelasticProcess = new G4HadronInelasticProcess("pionPlusInelastic", G4PionPlus::PionPlus());
+  /*auto pionPlusInelasticProcess = new G4HadronInelasticProcess("pionPlusInelastic", G4PionPlus::PionPlus());
   helper->RegisterProcess(pionPlusInelasticProcess, G4PionPlus::PionPlus());	
   pionPlusInelasticProcess->AddDataSet(new G4BGGPionInelasticXS(G4PionPlus::Definition()) );
-  pionPlusInelasticProcess->RegisterMe(flukaModel);
+  pionPlusInelasticProcess->RegisterMe(flukaModel);*/
 
-  /*build_G4_process_helpers::buildInelasticProcess(G4PionMinus::PionMinus(),
+  build_G4_process_helpers::buildInelasticProcess(G4PionMinus::PionMinus(),
                                                   helper,
                                                   flukaInelasticScatteringXS,
-                                                  flukaModel);*/
+                                                  flukaModel);
   // DEBUG: CHERRY PICK G4 XS INSTEAD
-  auto pionMinusInelasticProcess = new G4HadronInelasticProcess("pionMinusInelastic", G4PionMinus::PionMinus());
+  /*auto pionMinusInelasticProcess = new G4HadronInelasticProcess("pionMinusInelastic", G4PionMinus::PionMinus());
   helper->RegisterProcess(pionMinusInelasticProcess, G4PionMinus::PionMinus());	
   pionMinusInelasticProcess->AddDataSet(new G4BGGPionInelasticXS(G4PionMinus::Definition()) );
-  pionMinusInelasticProcess->RegisterMe(flukaModel);
+  pionMinusInelasticProcess->RegisterMe(flukaModel);*/
 
 
   // TAKE G4 XS and MODELS
@@ -287,13 +286,13 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
 
 
   // KAONS
-  /*build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetKaons(), 
+  build_G4_process_helpers::buildInelasticProcessForEachParticle(G4HadParticles::GetKaons(), 
                                                                  helper,
                                                                  flukaInelasticScatteringXS,
-                                                                 flukaModel);*/
+                                                                 flukaModel);
 
   // DEBUG: CHERRY PICK G4 XS INSTEAD
-  const auto particlesTable = G4ParticleTable::GetParticleTable();
+  /*const auto particlesTable = G4ParticleTable::GetParticleTable();
   // Loop on all particles
   for (const auto& particlePDGId : G4HadParticles::GetKaons()) {
 	  const auto particle = particlesTable->FindParticle(particlePDGId);
@@ -302,7 +301,7 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
 	  helper->RegisterProcess(kaonInelasticProcess, particle);	
 	  kaonInelasticProcess->AddDataSet(new G4CrossSectionInelastic(new G4ComponentGGHadronNucleusXsc()) );
 	  kaonInelasticProcess->RegisterMe(flukaModel);
-  }
+	  }*/
   
 
   // TAKE G4 XS and MODELS
