@@ -129,6 +129,7 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
 
   // FLUKA hadron - nucleus model
 	double minFLUKA = 29.*CLHEP::GeV;
+	//double minFLUKA = 6.1*CLHEP::GeV;
 	const auto flukaModel = new FLUKANuclearInelasticModel();
 	flukaModel->SetMinEnergy(minFLUKA);
 
