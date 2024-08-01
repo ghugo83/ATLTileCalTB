@@ -33,7 +33,7 @@ FLUKA interface included in geant4-11.1.ref05.
 #  include "globals.hh"
 
 #  include <iomanip>
-// #include "G4HadronPhysicsFTFP_BERT.hh" //replaced by FLUKAHadronInelasticPhysics.hh
+//#include "G4HadronPhysicsFTFP_BERT.hh" //replaced by FLUKAHadronInelasticPhysics.hh
 
 // Includers from FLUKA interface
 //
@@ -55,7 +55,9 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   RegisterPhysics(new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
-  RegisterPhysics(new G4EmExtraPhysics(ver));
+  auto emPhys = new G4EmExtraPhysics(ver);
+  emPhys->GammaNuclear(false);
+  RegisterPhysics(emPhys);
 
   // Decays
   RegisterPhysics(new G4DecayPhysics(ver));
@@ -64,7 +66,7 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   RegisterPhysics(new G4HadronElasticPhysics(ver));
 
   // Hadron Physics
-  // RegisterPhysics(  new G4HadronPhysicsFTFP_BERT(ver));
+  //RegisterPhysics(new G4HadronPhysicsFTFP_BERT(ver));
   RegisterPhysics(new FLUKAHadronInelasticPhysics(ver));
 
   // Stopping Physics
@@ -81,7 +83,7 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   // NB: COMPARISON WITH G4 DOES NOT SEEM MEANINGFUL
   // WHEN COALESCENCE IS ACTIVATED IN BOTH FLUKA AND G4.
   // Freedom to choose & see the effect of these switches is hence provided here.
-  const G4bool activateCoalescence = true;
+  const G4bool activateCoalescence = false;
   const G4bool activateHeavyFragmentsEvaporation = true;
   fluka_interface::initialize(activateCoalescence, activateHeavyFragmentsEvaporation);
 }
