@@ -60,6 +60,10 @@ class SpectrumAnalyzer
     // Step-wise methods
     void Analyze(const G4Step* step);
 
+	void ResetCounts();
+	void ComputeEventCounts();
+	void PrintEventCounts() const;
+
   private:
     // Members
     //
@@ -78,6 +82,28 @@ class SpectrumAnalyzer
 	G4double positronScore;
     G4double gammaScore;
     G4double othersScore;
+
+    G4int neutronCount;
+	G4int antiNeutronCount;
+    G4int protonCount;
+	G4int antiProtonCount;
+    G4int pionPlusCount;
+	G4int pionMinusCount;
+    G4int electronCount;
+	G4int positronCount;
+    G4int gammaCount;
+    G4int othersCount;
+
+G4int neutronCountPerEvent = 0.;
+	G4int antiNeutronCountPerEvent = 0.;
+    G4int protonCountPerEvent = 0.;
+	G4int antiProtonCountPerEvent = 0.;
+    G4int pionPlusCountPerEvent = 0.;
+	G4int pionMinusCountPerEvent = 0.;
+    G4int electronCountPerEvent = 0.;
+	G4int positronCountPerEvent = 0.;
+    G4int gammaCountPerEvent = 0.;
+    G4int othersCountPerEvent = 0.;
 
     // Scoring quantities
     inline static G4double GetMomentum(const G4Step* step)

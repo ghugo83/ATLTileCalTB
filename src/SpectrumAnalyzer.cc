@@ -65,17 +65,26 @@ void SpectrumAnalyzer::CreateNtupleAndScorer(const G4String scName)
 void SpectrumAnalyzer::FillEventFields() const
 {
   auto AM = G4AnalysisManager::Instance();
-  AM->FillNtupleDColumn(ntupleID, 0, neutronScore);
-  AM->FillNtupleDColumn(ntupleID, 1, antiNeutronScore);
-  AM->FillNtupleDColumn(ntupleID, 2, protonScore);
-  AM->FillNtupleDColumn(ntupleID, 3, antiProtonScore);
-  AM->FillNtupleDColumn(ntupleID, 4, pionPlusScore);
-  AM->FillNtupleDColumn(ntupleID, 5, pionMinusScore);
-  AM->FillNtupleDColumn(ntupleID, 6, electronScore);
-  AM->FillNtupleDColumn(ntupleID, 7, positronScore);
-  AM->FillNtupleDColumn(ntupleID, 8, gammaScore);
-  AM->FillNtupleDColumn(ntupleID, 9, othersScore);
-  AM->AddNtupleRow(ntupleID);
+  if ( neutronScore > 0.) { AM->FillNtupleDColumn(ntupleID, 0, neutronScore); }
+  if ( antiNeutronScore > 0.) { AM->FillNtupleDColumn(ntupleID, 1, antiNeutronScore); }
+  if ( protonScore > 0.) { AM->FillNtupleDColumn(ntupleID, 2, protonScore); }
+  if ( antiProtonScore > 0.) { AM->FillNtupleDColumn(ntupleID, 3, antiProtonScore); }
+  if ( pionPlusScore > 0.) { AM->FillNtupleDColumn(ntupleID, 4, pionPlusScore); }
+  if ( pionMinusScore > 0.) { AM->FillNtupleDColumn(ntupleID, 5, pionMinusScore); }
+  if ( electronScore > 0.) { AM->FillNtupleDColumn(ntupleID, 6, electronScore); }
+  if ( positronScore > 0.) { AM->FillNtupleDColumn(ntupleID, 7, positronScore); }
+  if ( gammaScore > 0.) { AM->FillNtupleDColumn(ntupleID, 8, gammaScore); }
+  if ( othersScore > 0.) { AM->FillNtupleDColumn(ntupleID, 9, othersScore); }
+  if ( neutronScore > 0.
+       || antiNeutronScore > 0.
+       || protonScore > 0.
+       || antiProtonScore > 0.
+       || pionPlusScore
+       || pionMinusScore > 0.
+       || electronScore > 0.
+       || positronScore > 0.
+       || gammaScore > 0.
+       || othersScore > 0.) { AM->AddNtupleRow(ntupleID); }
 }
 
 void SpectrumAnalyzer::Analyze(const G4Step* step) {
@@ -95,33 +104,43 @@ void SpectrumAnalyzer::Analyze(const G4Step* step) {
 
   if (PDGID == neutronID) {
 	  neutronScore += val;
+	  neutronCount++;
   }
   else if (PDGID == antineutronID) {
 	  antiNeutronScore += val;
+	  antiNeutronCount++;
   }
   else if (PDGID == protonID) {
 	  protonScore += val;
+	  protonCount++;
   }
   else if (PDGID == antiprotonID) {
 	  antiProtonScore += val;
+	  antiProtonCount++;
   }
   else if (PDGID == pionplusID) {
 	  pionPlusScore += val;
+	  pionPlusCount++;
   }
   else if (PDGID == pionminusID) {
 	  pionMinusScore += val;
+	  pionMinusCount++;
   }
   else if (PDGID == electronID) {
 	  electronScore += val;
+	  electronCount++;
   }
   else if (PDGID == positronID) {
 	  positronScore += val;
+	  positronCount++;
   }
   else if (PDGID == gammaID) {
 	  gammaScore += val;
+	  gammaCount++;
   }  
   else {
 	  othersScore += val;
+	  othersCount++;
   }
 
 #ifdef DEBUG
@@ -131,6 +150,50 @@ void SpectrumAnalyzer::Analyze(const G4Step* step) {
          << G4endl;
 #endif
 }
+
+
+void SpectrumAnalyzer::ResetCounts() {
+    neutronCount = 0.;
+	 antiNeutronCount = 0.;
+     protonCount = 0.;
+	 antiProtonCount = 0.;
+     pionPlusCount = 0.;
+	 pionMinusCount = 0.;
+     electronCount = 0.;
+	 positronCount = 0.;
+     gammaCount = 0.;
+     othersCount = 0.;
+}
+
+void SpectrumAnalyzer::ComputeEventCounts() {
+    neutronCountPerEvent += neutronCount;
+	 antiNeutronCountPerEvent += antiNeutronCount;
+     protonCountPerEvent += protonCount;
+	 antiProtonCountPerEvent += antiProtonCount;
+     pionPlusCountPerEvent += pionPlusCount;
+	 pionMinusCountPerEvent += pionMinusCount;
+     electronCountPerEvent += electronCount;
+	 positronCountPerEvent += positronCount;
+     gammaCountPerEvent += gammaCount;
+     othersCountPerEvent += othersCount;
+}
+
+void SpectrumAnalyzer::PrintEventCounts() const {
+	G4cout << "neutronCount = " << neutronCountPerEvent
+	       << ", antiNeutronCount = " << antiNeutronCountPerEvent
+	       << ", protonCount = " << protonCountPerEvent
+	       << ", antiProtonCount = " << antiProtonCountPerEvent
+	       << ", pionPlusCount = " << pionPlusCountPerEvent
+	       << ", pionMinusCount = " << pionMinusCountPerEvent
+	       << ", electronCount = " << electronCountPerEvent
+	       << ", positronCount = " << positronCountPerEvent
+	       << ", gammaCount = " << gammaCountPerEvent
+	       << ", othersCount = " << othersCountPerEvent
+	       << G4endl;
+
+}
+
+
 
 #endif // ATLTileCalTB_LEAKANALYSIS
 

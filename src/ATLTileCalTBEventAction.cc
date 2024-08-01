@@ -62,9 +62,12 @@ void ATLTileCalTBEventAction::Add( std::size_t index, G4double de ) {
 	
 	if (index == 0) {
 		auto analysisManager = G4AnalysisManager::Instance();
-		analysisManager->FillNtupleDColumn(0, de); 
+		if (de > 0.) { analysisManager->FillNtupleDColumn(0, de); 
+			analysisManager->AddNtupleRow();
+		}
 
 		SpectrumAnalyzer::GetInstance()->FillEventFields();
+		SpectrumAnalyzer::GetInstance()->ClearEventFields();
 	}
 }
 
@@ -85,6 +88,8 @@ void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event*
     #ifdef ATLTileCalTB_LEAKANALYSIS
     SpectrumAnalyzer::GetInstance()->ClearEventFields();
     #endif
+
+    SpectrumAnalyzer::GetInstance()->ResetCounts();
 }
 
 //GetHitsCollection method()
@@ -109,6 +114,7 @@ ATLTileCalTBHitsCollection* ATLTileCalTBEventAction::GetHitsCollection(G4int hcI
 void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
 
     auto analysisManager = G4AnalysisManager::Instance();
+    SpectrumAnalyzer::GetInstance()->ComputeEventCounts();
 
     /*G4int counter = 0;
     for ( auto& value : fAux ){ 

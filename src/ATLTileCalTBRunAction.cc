@@ -118,6 +118,7 @@ void ATLTileCalTBRunAction::BeginOfRunAction(const G4Run* run) {
 void ATLTileCalTBRunAction::EndOfRunAction(const G4Run* /*run*/) {
 
     auto analysisManager = G4AnalysisManager::Instance();
+    SpectrumAnalyzer::GetInstance()->PrintEventCounts();
     analysisManager->Write();
     analysisManager->CloseFile();
     
