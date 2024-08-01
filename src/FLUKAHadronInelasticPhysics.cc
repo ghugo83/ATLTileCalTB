@@ -57,10 +57,11 @@
 #include "G4KaonBuilder.hh"
 #include "G4BertiniKaonBuilder.hh"
 #include "G4FTFPKaonBuilder.hh"
-//#include "G4TheoFSGenerator.hh"
-//#include "G4GeneratorPrecompoundInterface.hh"
-//#include "G4FTFModel.hh"
-//#include "G4ExcitedStringDecay.hh"
+
+#include "G4TheoFSGenerator.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4FTFModel.hh"
+#include "G4ExcitedStringDecay.hh"
 //#include "G4QuasiElasticChannel.hh"
 
 
@@ -280,7 +281,19 @@ void FLUKAHadronInelasticPhysics::ConstructProcess() {
   auto pionPlusInelasticProcess = G4PhysListUtil::FindInelasticProcess(G4PionPlus::PionPlus());
   if (pionPlusInelasticProcess) { pionPlusInelasticProcess->RegisterMe(flukaModel); }
   auto pionMinusInelasticProcess = G4PhysListUtil::FindInelasticProcess(G4PionMinus::PionMinus());
-  if (pionMinusInelasticProcess) { pionMinusInelasticProcess->RegisterMe(flukaModel); }
+  if (pionMinusInelasticProcess) { 
+	  G4TheoFSGenerator* theModel = new G4TheoFSGenerator("FTFP");
+
+	  G4FTFModel* theStringModel = new G4FTFModel();
+	  theStringModel->SetFragmentationModel(new G4ExcitedStringDecay());
+	  G4GeneratorPrecompoundInterface* theCascade = new G4GeneratorPrecompoundInterface();
+	  theModel->SetHighEnergyGenerator(theStringModel);
+	  theModel->SetTransport(theCascade);
+
+	  theModel->SetMinEnergy(minFLUKA);
+	  theModel->SetMaxEnergy(G4HadronicParameters::Instance()->GetMaxEnergy());
+	  pionMinusInelasticProcess->RegisterMe(theModel); 
+  }
 
 
 
