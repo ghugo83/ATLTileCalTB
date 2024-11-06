@@ -74,6 +74,9 @@ void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event*
     #ifdef ATLTileCalTB_LEAKANALYSIS
     SpectrumAnalyzer::GetInstance()->ClearEventFields();
     #endif
+
+    G4cout << G4endl;
+    G4cout << "@@@@@@@@@@@@@@ Start event" << G4endl;
 }
 
 //GetHitsCollection method()

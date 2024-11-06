@@ -66,6 +66,8 @@ void SpectrumAnalyzer::FillEventFields() const
 {
   auto AM = G4AnalysisManager::Instance();
   AM->FillNtupleDColumn(ntupleID, 0, neutronScore);
+  if (neutronScore >= 2500) { G4cout << "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; } 
+  G4cout << "END OF EVENT: Fill neutron score = " << neutronScore << G4endl;
   AM->FillNtupleDColumn(ntupleID, 1, antiNeutronScore);
   AM->FillNtupleDColumn(ntupleID, 2, protonScore);
   AM->FillNtupleDColumn(ntupleID, 3, antiProtonScore);
@@ -95,6 +97,8 @@ void SpectrumAnalyzer::Analyze(const G4Step* step) {
 
   if (PDGID == neutronID) {
 	  neutronScore += val;
+	  /*G4cout << "Stack val = " << val 
+	    << ", now neutron score = " << neutronScore << G4endl;*/
   }
   else if (PDGID == antineutronID) {
 	  antiNeutronScore += val;
