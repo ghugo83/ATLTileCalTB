@@ -90,6 +90,9 @@ void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event*
     #endif
 
     SpectrumAnalyzer::GetInstance()->ResetCounts();
+
+    G4cout << G4endl;
+    G4cout << "@@@@@@@@@@@@@@ Start event" << G4endl;
 }
 
 //GetHitsCollection method()
