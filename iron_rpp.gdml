@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define/>
+
+  <materials>
+    <isotope N="54" Z="26" name="Fe540x48f26850">
+      <atom unit="g/mole" value="53.9396"/>
+    </isotope>
+    <isotope N="56" Z="26" name="Fe560x48f26800">
+      <atom unit="g/mole" value="55.9349"/>
+    </isotope>
+    <isotope N="57" Z="26" name="Fe570x48f267b0">
+      <atom unit="g/mole" value="56.9354"/>
+    </isotope>
+    <isotope N="58" Z="26" name="Fe580x48f26760">
+      <atom unit="g/mole" value="57.9333"/>
+    </isotope>
+    <element name="Iron0x47d5e540">
+      <fraction n="0.05845" ref="Fe540x48f26850"/>
+      <fraction n="0.91754" ref="Fe560x48f26800"/>
+      <fraction n="0.02119" ref="Fe570x48f267b0"/>
+      <fraction n="0.00282" ref="Fe580x48f26760"/>
+    </element>
+    <material name="Iron" state="solid">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="286"/>
+      <D unit="g/cm3" value="7.87"/>
+      <fraction n="1" ref="Iron0x47d5e540"/>
+    </material>
+  
+    
+    <isotope N="14" Z="7" name="N140x48f26da0">
+      <atom unit="g/mole" value="14.0031"/>
+    </isotope>
+    <isotope N="15" Z="7" name="N150x48f26d50">
+      <atom unit="g/mole" value="15.0001"/>
+    </isotope>
+    <element name="Nitrogen0x47d5e240">
+      <fraction n="0.99632" ref="N140x48f26da0"/>
+      <fraction n="0.00368" ref="N150x48f26d50"/>
+    </element>
+    <isotope N="36" Z="18" name="Ar360x48f26b70">
+      <atom unit="g/mole" value="35.9675"/>
+    </isotope>
+    <isotope N="38" Z="18" name="Ar380x48f26b20">
+      <atom unit="g/mole" value="37.9627"/>
+    </isotope>
+    <isotope N="40" Z="18" name="Ar400x48f26ad0">
+      <atom unit="g/mole" value="39.9624"/>
+    </isotope>
+    <isotope N="16" Z="8" name="O160x48f26cb0">
+      <atom unit="g/mole" value="15.9949"/>
+    </isotope>
+    <isotope N="17" Z="8" name="O170x48f26c60">
+      <atom unit="g/mole" value="16.9991"/>
+    </isotope>
+    <isotope N="18" Z="8" name="O180x48f26c10">
+      <atom unit="g/mole" value="17.9992"/>
+    </isotope>
+    <element name="Oxygen0x47d5e300">
+      <fraction n="0.99757" ref="O160x48f26cb0"/>
+      <fraction n="0.00038" ref="O170x48f26c60"/>
+      <fraction n="0.00205" ref="O180x48f26c10"/>
+    </element>
+    <element name="Argon0x47d5e3c0">
+      <fraction n="0.003365" ref="Ar360x48f26b70"/>
+      <fraction n="0.000632" ref="Ar380x48f26b20"/>
+      <fraction n="0.996003" ref="Ar400x48f26ad0"/>
+    </element>
+    <isotope N="1" Z="1" name="H10x48f26a30">
+      <atom unit="g/mole" value="1.00782503081372"/>
+    </isotope>
+    <isotope N="2" Z="1" name="H20x48f269e0">
+      <atom unit="g/mole" value="2.01410199966617"/>
+    </isotope>
+    <element name="Hydrogen0x47d5e480">
+      <fraction n="0.999885" ref="H10x48f26a30"/>
+      <fraction n="0.000115" ref="H20x48f269e0"/>
+    </element>
+    <material name="Air" state="gas">
+      <T unit="K" value="293.15"/>
+      <MEE unit="eV" value="85.5378230492444"/>
+      <D unit="g/cm3" value="0.001214"/>
+      <fraction n="0.7494" ref="Nitrogen0x47d5e240"/>
+      <fraction n="0.2369" ref="Oxygen0x47d5e300"/>
+      <fraction n="0.0129" ref="Argon0x47d5e3c0"/>
+      <fraction n="0.0008" ref="Hydrogen0x47d5e480"/>
+    </material>
+    
+  </materials>
+
+  <solids>
+    <box lunit="mm" name="mybox" x="2000" y="1000" z="4000"/>
+    <box lunit="mm" name="allbox" x="1200000" y="10000" z="20000"/>
+  </solids>
+
+  <structure>    
+  
+    <volume name="ironbox">
+      <materialref ref="Iron"/>
+      <solidref ref="mybox"/>
+    </volume>
+    
+     <volume name="all">
+      <materialref ref="Air"/>
+      <solidref ref="allbox"/>
+         
+        <physvol name="ironboxPV">
+        <volumeref ref="ironbox"/>
+        <position name="rpp_pos" unit="mm" x="4000" y="0" z="500"/>
+        </physvol>  
+    </volume>
+    
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="all"/>
+  </setup>
+
+</gdml>
