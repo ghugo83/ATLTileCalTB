@@ -189,7 +189,9 @@ int main(int argc, char **argv) {
 #endif // #ifndef G4_USE_FLUKA
 
   G4GDMLParser parser;
-  parser.Read("TileTB_2B1EB_nobeamline.gdml", false);
+  //parser.Read("TileTB_2B1EB_nobeamline.gdml", false);
+  //parser.Read("TileTB_2B1EB_nobeamline_simplify.gdml", false);
+  parser.Read("iron_rpp.gdml", false);
   runManager->SetUserInitialization(new ATLTileCalTBDetConstruction(parser));
 
   // Classes via ActionInitialization
