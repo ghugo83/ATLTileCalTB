@@ -103,7 +103,8 @@
     </volume>
     
      <volume name="all">
-      <materialref ref="Air"/>
+      <!--<materialref ref="Air"/>-->
+      <materialref ref="G4_Galactic"/>
       <solidref ref="allbox"/>
          
         <physvol name="ironboxPV">
