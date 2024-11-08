@@ -28,8 +28,15 @@ ATLTileCalTBStepAction::~ATLTileCalTBStepAction() {}
 void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
     
     //Collect out of world leakage
-    //
-    if ( !aStep->GetTrack()->GetNextVolume() ){
+	//if (!aStep->GetTrack()->GetNextVolume()) {
+	const G4StepPoint* const prePoint  = aStep->GetPreStepPoint();
+	const G4StepPoint* const postPoint = aStep->GetPostStepPoint();
+	if ( prePoint->GetTouchable()->GetVolume(0) 
+	     && postPoint->GetTouchable()->GetVolume(0)
+	     && prePoint->GetTouchable()->GetVolume(0)->GetName() == "ironboxPV"
+	     && postPoint->GetTouchable()->GetVolume(0)->GetName() == "all_PV"
+		) {
+
 	    //G4cout << "ATLTileCalTBStepAction::UserSteppingAction aStep->GetTrack()->GetKineticEnergy() = " << aStep->GetTrack()->GetKineticEnergy() << G4endl;
         
         #ifdef ATLTileCalTB_LEAKANALYSIS
@@ -39,25 +46,25 @@ void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
 	fEventAction->Add( 0, aStep->GetTrack()->GetKineticEnergy() ); 
 
 
-	/*
+	
 	const auto& myTrack = aStep->GetTrack();
 
 	auto creator = myTrack->GetCreatorProcess();
 	int processCount = 1;
-	while (creator && creator->GetProcessName() == "neutronInelastic" && processCount <= 100000) {
+	while (creator && creator->GetProcessName() == "neutronInelastic" && processCount <= 3) {
 	    creator = creator->GetCreatorProcess();
 	    processCount++;
         }
-	G4cout << "@@@@@@@@@@@@@@@@@@@@@@@ Ancestor creator level " << processCount << " is " << creator->GetProcessName() << G4endl;*/
 
-	/*const G4StepPoint* const prePoint  = aStep->GetPreStepPoint();
-	const G4StepPoint* const postPoint = aStep->GetPostStepPoint();
-	if (myTrack->GetParticleDefinition()->GetParticleName() == "neutron") {
-		//|| myTrack->GetParticleDefinition()->GetParticleName() == "pi+") {
+
+	//if (myTrack->GetParticleDefinition()->GetParticleName() == "neutron") {
+	/*if (myTrack->GetParticleDefinition()->GetParticleName() == "pi-") {
+		G4cout << G4endl;
 		G4cout << "particle = " << myTrack->GetParticleDefinition()->GetParticleName()
 		       << ", ke [MeV] = " << myTrack->GetKineticEnergy() 
-		       << "creator = " << myTrack->GetCreatorProcess()->GetProcessName()
+		       << ", creator = " << myTrack->GetCreatorProcess()->GetProcessName()
 		       << G4endl;
+		G4cout << "@@@@@@@@@@@@@@@@@@@@@@@ Ancestor creator level " << processCount << " is " << creator->GetProcessName() << G4endl;
 		G4cout << ", PREPOINT: " << prePoint->GetPosition() << ", R = " << prePoint->GetPosition().getR()
 		       << ", GetStepStatus() = " << prePoint->GetStepStatus()
 		       << G4endl;
@@ -75,7 +82,10 @@ void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
 			       << G4endl;
 		}
 		}*/
-    }
+
+}
+
+
 
     if ( aStep->GetTrack()->GetTouchableHandle()->GetVolume()->GetName() != "CALO::CALO" ||
          aStep->GetTrack()->GetTouchableHandle()->GetVolume()->GetName() != "Barrel" ) {

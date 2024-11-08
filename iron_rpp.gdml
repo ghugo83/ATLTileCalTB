@@ -108,7 +108,8 @@
          
         <physvol name="ironboxPV">
         <volumeref ref="ironbox"/>
-        <position name="rpp_pos" unit="mm" x="4000" y="0" z="500"/>
+        <!--<position name="rpp_pos" unit="mm" x="4000" y="0" z="0"/>-->
+        <position name="rpp_pos" unit="mm" x="5000" y="0" z="0"/>
         </physvol>  
     </volume>
     
