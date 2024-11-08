@@ -9,6 +9,8 @@
 
 //Includers from project files
 //
+#include <G4Step.hh>
+
 #include "ATLTileCalTBStepAction.hh"
 #ifdef ATLTileCalTB_LEAKANALYSIS
 #include "SpectrumAnalyzer.hh"
@@ -37,24 +39,24 @@ void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
 	     && postPoint->GetTouchable()->GetVolume(0)->GetName() == "all_PV"
 		) {
 
-	    //G4cout << "ATLTileCalTBStepAction::UserSteppingAction aStep->GetTrack()->GetKineticEnergy() = " << aStep->GetTrack()->GetKineticEnergy() << G4endl;
+		//G4cout << "ATLTileCalTBStepAction::UserSteppingAction aStep->GetTrack()->GetKineticEnergy() = " << aStep->GetTrack()->GetKineticEnergy() << G4endl;
         
-        #ifdef ATLTileCalTB_LEAKANALYSIS
-        SpectrumAnalyzer::GetInstance()->Analyze(aStep);
-        #endif
+#ifdef ATLTileCalTB_LEAKANALYSIS
+		SpectrumAnalyzer::GetInstance()->Analyze(aStep);
+#endif
 
-	fEventAction->Add( 0, aStep->GetTrack()->GetKineticEnergy() ); 
+		fEventAction->Add( 0, aStep->GetTrack()->GetKineticEnergy() ); 
 
 
 	
-	const auto& myTrack = aStep->GetTrack();
+		const auto& myTrack = aStep->GetTrack();
 
-	auto creator = myTrack->GetCreatorProcess();
-	int processCount = 1;
-	while (creator && creator->GetProcessName() == "neutronInelastic" && processCount <= 3) {
-	    creator = creator->GetCreatorProcess();
-	    processCount++;
-        }
+		auto creator = myTrack->GetCreatorProcess();
+		int processCount = 1;
+		while (creator && creator->GetProcessName() == "neutronInelastic" && processCount <= 3) {
+			creator = creator->GetCreatorProcess();
+			processCount++;
+		}
 
 
 	//if (myTrack->GetParticleDefinition()->GetParticleName() == "neutron") {

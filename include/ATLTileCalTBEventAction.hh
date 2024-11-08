@@ -18,6 +18,7 @@
 //Includers from project files
 //
 #include "ATLTileCalTBHit.hh"
+#include "FinalStateHistoManager.hh"
 
 //Includers from C++
 //
@@ -43,6 +44,8 @@ class ATLTileCalTBEventAction : public G4UserEventAction {
         virtual void BeginOfEventAction( const G4Event* event );
         virtual void EndOfEventAction( const G4Event* event );
 
+	void EndOfRun();
+
         void Add( std::size_t index, G4double de );
 
         std::vector<G4double>& GetEdepVector() { return fEdepVector; };
@@ -58,6 +61,7 @@ class ATLTileCalTBEventAction : public G4UserEventAction {
         #ifdef ATLTileCalTB_PulseOutput
         std::filesystem::path pulse_event_path;
         #endif
+	FinalStateHistoManager histoManager_;
 };
                      
 

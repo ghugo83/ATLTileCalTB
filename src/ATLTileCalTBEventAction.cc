@@ -54,6 +54,9 @@ ATLTileCalTBEventAction::ATLTileCalTBEventAction()
 {
 	fEdepVector = std::vector<G4double>(fNoOfCells, 0.);
 	fSdepVector = std::vector<G4double>(fNoOfCells, 0.);
+
+    histoManager_ = FinalStateHistoManager();
+    histoManager_.Book();
 }
 
 ATLTileCalTBEventAction::~ATLTileCalTBEventAction() {
@@ -66,10 +69,35 @@ void ATLTileCalTBEventAction::Add( std::size_t index, G4double de ) {
 		auto analysisManager = G4AnalysisManager::Instance();
 		if (de > 0.) { analysisManager->FillNtupleDColumn(0, de); 
 			analysisManager->AddNtupleRow();
+			histoManager_.ScoreSecondary(index, "total", de); 
 		}
 
-		SpectrumAnalyzer::GetInstance()->FillEventFields();
-		SpectrumAnalyzer::GetInstance()->ClearEventFields();
+		auto specAnalyzer = SpectrumAnalyzer::GetInstance();
+
+		// HERE
+		if (specAnalyzer->getNeutronScore()) {
+			histoManager_.ScoreSecondary(1, "neutron", specAnalyzer->getNeutronScore()); 
+		}
+		else if (specAnalyzer->getProtonScore()) {
+			histoManager_.ScoreSecondary(2, "proton", specAnalyzer->getProtonScore());
+		}
+		else if (specAnalyzer->getPionPlusScore()) {
+			histoManager_.ScoreSecondary(3, "pionPlus", specAnalyzer->getPionPlusScore()); 
+		}
+		else if (specAnalyzer->getGammaScore()) {
+			histoManager_.ScoreSecondary(4, "gamma", specAnalyzer->getGammaScore());
+		}
+		else if (specAnalyzer->getElectronScore()) {
+			histoManager_.ScoreSecondary(5, "electron", specAnalyzer->getElectronScore()); 
+		}
+		else if (specAnalyzer->getOthersScore()) {
+			histoManager_.ScoreSecondary(6, "others", specAnalyzer->getOthersScore()); 
+		}
+
+		histoManager_.EndOfEvent();
+
+		specAnalyzer->FillEventFields();
+		specAnalyzer->ClearEventFields();
 	}
 }
 
@@ -92,9 +120,12 @@ void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event*
     #endif
 
     SpectrumAnalyzer::GetInstance()->ResetCounts();
+    histoManager_.BeginOfEvent();
 
     G4cout << G4endl;
     G4cout << "@@@@@@@@@@@@@@ Start event" << G4endl;
+
+    
 }
 
 //GetHitsCollection method()
@@ -236,11 +267,10 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
     */ 
 
 
-    /*
-    #ifdef ATLTileCalTB_LEAKANALYSIS
-    SpectrumAnalyzer::GetInstance()->FillEventFields();
-    #endif
-    */
 } 
 
 //**************************************************
+
+void ATLTileCalTBEventAction::EndOfRun() {
+	histoManager_.EndOfRun();
+}
