@@ -45,13 +45,15 @@
 
 //Constructor and de-constructor
 //
-ATLTileCalTBEventAction::ATLTileCalTBEventAction(ATLTileCalTBPrimaryGenAction* pga)
-    : G4UserEventAction(),
-      fPrimaryGenAction(pga),
-      fNoOfCells(ATLTileCalTBGeometry::CellLUT::GetInstance()->GetNumberOfCells()),
-      fAux{0., 0.} {
-    fEdepVector = std::vector<G4double>(fNoOfCells, 0.);
-    fSdepVector = std::vector<G4double>(fNoOfCells, 0.);
+//ATLTileCalTBEventAction::ATLTileCalTBEventAction(ATLTileCalTBPrimaryGenAction* pga)
+ATLTileCalTBEventAction::ATLTileCalTBEventAction()
+	: G4UserEventAction(),
+	  //fPrimaryGenAction(pga),
+	  fNoOfCells(ATLTileCalTBGeometry::CellLUT::GetInstance()->GetNumberOfCells()),
+	  fAux{0., 0.} 
+{
+	fEdepVector = std::vector<G4double>(fNoOfCells, 0.);
+	fSdepVector = std::vector<G4double>(fNoOfCells, 0.);
 }
 
 ATLTileCalTBEventAction::~ATLTileCalTBEventAction() {
@@ -75,8 +77,8 @@ void ATLTileCalTBEventAction::Add( std::size_t index, G4double de ) {
 //
 void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event* event) {
     for ( auto& value : fAux ){ value = 0.; } 
-    for ( auto& value : fEdepVector ) { value = 0.; }
-    for ( auto& value : fSdepVector ) { value = 0.; }
+    //for ( auto& value : fEdepVector ) { value = 0.; }
+    //for ( auto& value : fSdepVector ) { value = 0.; }
 
     #ifdef ATLTileCalTB_PulseOutput
     auto runNumber = G4RunManager::GetRunManager()->GetCurrentRun()->GetRunID();
@@ -97,9 +99,9 @@ void ATLTileCalTBEventAction::BeginOfEventAction([[maybe_unused]] const G4Event*
 
 //GetHitsCollection method()
 //
-ATLTileCalTBHitsCollection* ATLTileCalTBEventAction::GetHitsCollection(G4int hcID,
+/*ATLTileCalTBHitsCollection* ATLTileCalTBEventAction::GetHitsCollection(G4int hcID,
                                                                        const G4Event* event) const {
-    auto hitsCollection = static_cast<ATLTileCalTBHitsCollection*>( event->GetHCofThisEvent()->GetHC(hcID) );
+	auto hitsCollection = static_cast<ATLTileCalTBHitsCollection*>( event->GetHCofThisEvent()->GetHC(hcID) );
   
     if ( ! hitsCollection ) {
         G4ExceptionDescription msg;
@@ -110,7 +112,7 @@ ATLTileCalTBHitsCollection* ATLTileCalTBEventAction::GetHitsCollection(G4int hcI
 
     return hitsCollection;
 
-}    
+    }    */
 
 //EndOfEventaction() method
 //
@@ -129,7 +131,7 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
     }*/
 
 
-    
+    /*
     //Method to convolute signal for PMT response
     //From https://gitlab.cern.ch/allpix-squared/allpix-squared/-/blob/86fe21ad37d353e36a509a0827562ab7fadd5104/src/modules/CSADigitizer/CSADigitizerModule.cpp#L271-L283
     auto ConvolutePMT = [](const std::array<G4double, ATLTileCalTBConstants::frames>& sdep) {
@@ -231,7 +233,7 @@ void ATLTileCalTBEventAction::EndOfEventAction( const G4Event* event ) {
     analysisManager->FillNtupleFColumn(7, fPrimaryGenAction->GetParticlenGun()->GetParticleEnergy());
 
     analysisManager->AddNtupleRow();
-     
+    */ 
 
 
     /*

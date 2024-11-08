@@ -25,7 +25,7 @@ class ATLTileCalTBDetConstruction : public G4VUserDetectorConstruction {
         ATLTileCalTBDetConstruction  (const G4GDMLParser& parser);
         ~ATLTileCalTBDetConstruction ();
         virtual G4VPhysicalVolume* Construct();
-        virtual void ConstructSDandField();
+        //virtual void ConstructSDandField();
 
     private:
         const G4GDMLParser& fParser;

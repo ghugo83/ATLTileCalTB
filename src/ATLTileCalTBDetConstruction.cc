@@ -36,7 +36,7 @@ G4VPhysicalVolume* ATLTileCalTBDetConstruction::Construct() {
 
     auto worldPV = fParser.GetWorldVolume();
     
-    DefineVisAttributes();
+    //DefineVisAttributes();
 
     return worldPV;
 
@@ -44,7 +44,7 @@ G4VPhysicalVolume* ATLTileCalTBDetConstruction::Construct() {
 
 //ConstructSDandField() method
 //
-void ATLTileCalTBDetConstruction::ConstructSDandField() {
+/*void ATLTileCalTBDetConstruction::ConstructSDandField() {
 
     //Sensitive detectors
     //
@@ -62,7 +62,7 @@ void ATLTileCalTBDetConstruction::ConstructSDandField() {
 
     //No fields involved
 
-}
+    }*/
 
 //DefineVisAttributes() method
 //

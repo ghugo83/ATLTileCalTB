@@ -4,6 +4,9 @@
 /run/initialize
 /gun/particle pi+
 /gun/energy 30 GeV
+/gun/direction 1 0 0
+
 /run/dumpCouples
-/run/beamOn 100 #10000
+/run/beamOn 100
+#/run/beamOn 10000
 

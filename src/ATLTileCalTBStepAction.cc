@@ -86,7 +86,7 @@ void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
 }
 
 
-
+	/*
     if ( aStep->GetTrack()->GetTouchableHandle()->GetVolume()->GetName() != "CALO::CALO" ||
          aStep->GetTrack()->GetTouchableHandle()->GetVolume()->GetName() != "Barrel" ) {
  
@@ -95,7 +95,7 @@ void ATLTileCalTBStepAction::UserSteppingAction( const G4Step* aStep ) {
 	    //
 	    fEventAction->Add( 1, aStep->GetTotalEnergyDeposit() );
     
-    }
+	    }*/
 
 }
 
