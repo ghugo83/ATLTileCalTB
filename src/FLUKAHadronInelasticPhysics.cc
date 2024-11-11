@@ -27,10 +27,10 @@
 // G4
 #include "G4HadronInelasticProcess.hh"
 
-#include "build_G4_process_helpers.hh"
+#include "build_G4_process_helpers.h"
 
-#include "FLUKAInelasticScatteringXS.hh"
-#include "FLUKANuclearInelasticModel.hh"
+#include "FLUKAInelasticScatteringXS.h"
+#include "FLUKANuclearInelasticModel.h"
 
 
 // DEBUG: CHERRY PICK FTFP_BERT XS / MODELS INSTEAD

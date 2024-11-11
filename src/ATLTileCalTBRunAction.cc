@@ -121,9 +121,9 @@ void ATLTileCalTBRunAction::EndOfRunAction(const G4Run* /*run*/) {
     SpectrumAnalyzer::GetInstance()->PrintEventCounts();
     analysisManager->Write();
     analysisManager->CloseFile();
-    if (!G4Threading::IsMasterThread()) {
+    //if (!G4Threading::IsMasterThread()) {
 	    fEventAction->EndOfRun();
-    }
+	    //}
 }
 
 //**************************************************

@@ -37,7 +37,7 @@ FLUKA interface included in geant4-11.1.ref05.
 
 // Includers from FLUKA interface
 //
-#  include "fluka_interface.hh"
+#include "test_inelastic_interaction.h"
 
 G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4int ver)
 {
@@ -85,9 +85,8 @@ G4_CernFLUKAHadronInelastic_FTFP_BERT::G4_CernFLUKAHadronInelastic_FTFP_BERT(G4i
   // NB: COMPARISON WITH G4 DOES NOT SEEM MEANINGFUL
   // WHEN COALESCENCE IS ACTIVATED IN BOTH FLUKA AND G4.
   // Freedom to choose & see the effect of these switches is hence provided here.
-  const G4bool activateCoalescence = true;
-  const G4bool activateHeavyFragmentsEvaporation = true;
-  fluka_interface::initialize(activateCoalescence, activateHeavyFragmentsEvaporation);
+fluka_interface::activateCoalescence(true);
+fluka_interface::activateHeavyFragmentsEvaporation(true);
 }
 
 

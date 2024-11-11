@@ -18,12 +18,13 @@
 
 // Includers from Geant4
 //
-#ifdef G4MULTITHREADED
+/*#ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #include "G4Threading.hh"
-#else
+#else*/
+#include "G4RunManagerFactory.hh"
 #include "G4RunManager.hh"
-#endif
+//#endif
 // #include "G4RunManagerFactory.hh" //only available from 10.7 on
 #include "G4GDMLParser.hh"
 #include "G4PhysListFactory.hh"
@@ -39,7 +40,7 @@
 // Includers from FLUKAIntegration
 //
 #ifdef G4_USE_FLUKA
-#include "FLUKAParticleTable.hh"
+#include "fluka_particles.h"
 #endif
 
 // CLI string outputs
@@ -85,9 +86,10 @@ int main(int argc, char **argv) {
   G4String macro;
   G4String session;
   G4String custom_pl = "FTFP_BERT"; // default physics list
-#ifdef G4MULTITHREADED
-  G4int nThreads = G4Threading::G4GetNumberOfCores();
-#endif
+  /*#ifdef G4MULTITHREADED
+  G4cout << "@#$$%$$$$$$$$%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% G4MULTITHREADED" << G4endl;
+  //G4int nThreads = G4Threading::G4GetNumberOfCores();
+  #endif*/
 
   // CLI parsing
   for (G4int i = 1; i < argc; i = i + 2) {
@@ -97,11 +99,11 @@ int main(int argc, char **argv) {
       session = argv[i + 1];
     else if (G4String(argv[i]) == "-p")
       custom_pl = argv[i + 1];
-#ifdef G4MULTITHREADED
+    /*#ifdef G4MULTITHREADED
     else if (G4String(argv[i]) == "-t") {
       nThreads = G4UIcommand::ConvertToInt(argv[i + 1]);
     }
-#endif
+    #endif*/
     else if (G4String(argv[i]) == "-h") {
       CLIOutputs::PrintHelp();
       return 0;
@@ -138,14 +140,16 @@ int main(int argc, char **argv) {
   // Construct the run manager
   //
 
-#ifdef G4MULTITHREADED
+/*#ifdef G4MULTITHREADED
   auto runManager = new G4MTRunManager;
   if (nThreads > 0) {
     runManager->SetNumberOfThreads(nThreads);
   }
 #else
   auto runManager = new G4RunManager;
-#endif
+  #endif*/
+std::unique_ptr<G4RunManager> runManager(
+G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly));
 
   // Manadatory Geant4 classes
   //
@@ -163,7 +167,7 @@ int main(int argc, char **argv) {
   auto physList = new G4_CernFLUKAHadronInelastic_FTFP_BERT;
   runManager->SetUserInitialization(physList);
   // Initialize FLUKA <-> G4 particles conversions tables.
-  fluka_particle_table::initialize();
+  fluka_particles::initialize();
 #endif  // #ifndef G4_USE_FLUKA
 
 #ifndef G4_USE_FLUKA 
@@ -233,7 +237,7 @@ int main(int argc, char **argv) {
   // in the main() program
   //
   delete visManager;
-  delete runManager;
+  //delete runManager;
 }
 
 //**************************************************
