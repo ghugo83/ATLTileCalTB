@@ -60,7 +60,7 @@
 //
 // ***************************************************************************
 
-#include "FinalStateHistoManager.hh"
+#include "MyFinalStateHistoManager.hh"
 
 #include "G4RootAnalysisManager.hh"
 //#include "G4AnalysisManager.hh"
@@ -77,14 +77,19 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FinalStateHistoManager::FinalStateHistoManager() :
-  fOutputFileName("all_secondaries"),
+MyFinalStateHistoManager::MyFinalStateHistoManager() :
+#ifdef G4_USE_FLUKA
+  fOutputFileName("all_secondaries_FLUKA"),
+#else
+  fOutputFileName("all_secondaries_FTFP_BERT"),
+#endif
   fRootOutputFileName(fOutputFileName + ".root"),
   fFlairOutputFileName(fOutputFileName + ".hist"),
-  fNumBins(80),
+  fNumBins(1200),
   //fMinKineticEnergy(10. * keV),
-  fMinKineticEnergy(0.),
-  fMaxKineticEnergy(2. * GeV),
+  //fMinKineticEnergy(0.),
+  fMinKineticEnergy(1. * MeV),
+  fMaxKineticEnergy(30. * GeV),
   fFunctionName("none"),
   fBinSchemeName("linear"),
   fRootEnergyUnit("MeV"),
@@ -95,11 +100,6 @@ FinalStateHistoManager::FinalStateHistoManager() :
   //fNucleiZScoreIndex(0),
   //fNucleiAScoreIndex(1)
 {
-#ifdef G4_USE_FLUKA
-	    fOutputFileName = "all_secondaries_FLUKA";
-#else
-	    fOutputFileName = "all_secondaries_FTFP_BERT";
-#endif
 
   //fAnalysisManager = G4AnalysisManager::Instance();
   //fAnalysisManager->SetDefaultFileType("root");
@@ -112,7 +112,7 @@ FinalStateHistoManager::FinalStateHistoManager() :
 // Open output file + create residual nuclei histograms considered for final state study.
 // The histograms are G4H1, created via G4VAnalysisManager.
 // ***************************************************************************
-void FinalStateHistoManager::Book() {
+void MyFinalStateHistoManager::Book() {
 
   // Open file.
   if(!fAnalysisManager->OpenFile(fRootOutputFileName)) {
@@ -121,12 +121,12 @@ void FinalStateHistoManager::Book() {
     msg << "Booking histograms: cannot open file " 
         << fRootOutputFileName 
         << G4endl;
-    G4Exception("FinalStateHistoManager::Book",
+    G4Exception("MyFinalStateHistoManager::Book",
                 "Cannot open file",
                 FatalException,
                 msg);
   }
-  G4cout << "### FinalStateHistoManager::Book: Successfully opended file " 
+  G4cout << "### MyFinalStateHistoManager::Book: Successfully opended file " 
          << fRootOutputFileName 
          << " for dumping histograms." 
          << G4endl;
@@ -157,7 +157,7 @@ void FinalStateHistoManager::Book() {
 // ***************************************************************************
 // Keep track of the total number of events (used later on for normalization).
 // ***************************************************************************
-void FinalStateHistoManager::BeginOfEvent() {
+void MyFinalStateHistoManager::BeginOfEvent() {
   fNumEvents++;
 }
 
@@ -165,7 +165,7 @@ void FinalStateHistoManager::BeginOfEvent() {
 // ***************************************************************************
 // Fill all plots (WITHIN event, ie the interaction).
 // ***************************************************************************
-void FinalStateHistoManager::ScoreSecondary(const int secondaryIndex, 
+void MyFinalStateHistoManager::ScoreSecondary(const int secondaryIndex, 
 					    const G4String& particleName,
 					    const double score) {
 
@@ -239,7 +239,7 @@ void FinalStateHistoManager::ScoreSecondary(const int secondaryIndex,
 // ***************************************************************************
 // End of event: all event-level G4H1 are flushed into the Analysis Manager G4H1.
 // ***************************************************************************
-void FinalStateHistoManager::EndOfEvent() {
+void MyFinalStateHistoManager::EndOfEvent() {
 
   for (const auto& particleIt : fParticleData) {
     particleIt.second->EndOfEvent();
@@ -253,7 +253,7 @@ void FinalStateHistoManager::EndOfEvent() {
 // ***************************************************************************
 // Printout secondary counts + dump all plots into relevant formats.
 // ***************************************************************************
-void FinalStateHistoManager::EndOfRun() const {
+void MyFinalStateHistoManager::EndOfRun() const {
 
   // PRINTOUT SECONDARYS COUNTS (FULL ENERGY RANGE).
 
@@ -312,7 +312,7 @@ void FinalStateHistoManager::EndOfRun() const {
   G4cout << "particlesHistos.size() = " << particlesHistos.size() << G4endl;
 
   // DUMP G4H1 PLOTS INTO ROOT FILE
-  DumpAllG4H1IntoRootFile();
+  //DumpAllG4H1IntoRootFile();
 
   // DUMP G4H1 PLOTS INTO FLAIR FILE
   DumpAllG4H1IntoFlairFile(particlesHistos);
@@ -327,12 +327,12 @@ void FinalStateHistoManager::EndOfRun() const {
 // ***************************************************************************
 // DUMP G4H1 PLOTS INTO ROOT FILE (via G4VAnalysisManager).
 // ***************************************************************************
-void FinalStateHistoManager::DumpAllG4H1IntoRootFile() const {
+void MyFinalStateHistoManager::DumpAllG4H1IntoRootFile() const {
 
   if (!fAnalysisManager->Write()) {
     G4ExceptionDescription message;
     message << "Could not write ROOT file."; 
-    G4Exception("FinalStateHistoManager::EndOfRun()",
+    G4Exception("MyFinalStateHistoManager::EndOfRun()",
                 "I/O Error", 
                 FatalException, 
                 message);
@@ -344,13 +344,13 @@ void FinalStateHistoManager::DumpAllG4H1IntoRootFile() const {
 // ***************************************************************************
 // DUMP G4H1 PLOTS INTO FLAIR FILE (via tools::histo::flair).
 // ***************************************************************************
-void FinalStateHistoManager::DumpAllG4H1IntoFlairFile(
+void MyFinalStateHistoManager::DumpAllG4H1IntoFlairFile(
          const std::map<G4String, const G4H1Wrapper*>& particlesHistos) const {
 
   std::ofstream output;
   output.open(fFlairOutputFileName, std::ios_base::out);
   G4int indexInOutputFile = 1;
-  G4cout << "FinalStateHistoManager::DumpAllG4H1IntoFlairFile" << G4endl;
+  G4cout << "MyFinalStateHistoManager::DumpAllG4H1IntoFlairFile" << G4endl;
 
   // SECONDARIES ENERGY SPECTRA
   for (const auto& particleIt : particlesHistos) {

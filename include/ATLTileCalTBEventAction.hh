@@ -18,7 +18,7 @@
 //Includers from project files
 //
 #include "ATLTileCalTBHit.hh"
-#include "FinalStateHistoManager.hh"
+#include "MyFinalStateHistoManager.hh"
 
 //Includers from C++
 //
@@ -61,7 +61,7 @@ class ATLTileCalTBEventAction : public G4UserEventAction {
         #ifdef ATLTileCalTB_PulseOutput
         std::filesystem::path pulse_event_path;
         #endif
-	FinalStateHistoManager histoManager_;
+	MyFinalStateHistoManager histoManager_;
 };
                      
 

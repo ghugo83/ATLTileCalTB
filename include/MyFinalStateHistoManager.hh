@@ -60,8 +60,8 @@
 //
 // ***************************************************************************
 
-#ifndef FINAL_STATE_HISTO_MANAGER_HH
-#define FINAL_STATE_HISTO_MANAGER_HH
+#ifndef MY_FINAL_STATE_HISTO_MANAGER_HH
+#define MY_FINAL_STATE_HISTO_MANAGER_HH
 
 #include <memory>
 #include <unordered_map>
@@ -80,10 +80,10 @@ class G4VAnalysisManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class FinalStateHistoManager {
+class MyFinalStateHistoManager {
 
 public:
-  FinalStateHistoManager();
+  MyFinalStateHistoManager();
 
   void Book();
   void BeginOfEvent();

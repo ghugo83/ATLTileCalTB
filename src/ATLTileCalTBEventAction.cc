@@ -55,7 +55,7 @@ ATLTileCalTBEventAction::ATLTileCalTBEventAction()
 	fEdepVector = std::vector<G4double>(fNoOfCells, 0.);
 	fSdepVector = std::vector<G4double>(fNoOfCells, 0.);
 
-    histoManager_ = FinalStateHistoManager();
+    histoManager_ = MyFinalStateHistoManager();
     histoManager_.Book();
 }
 
