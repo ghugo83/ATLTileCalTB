@@ -30,6 +30,17 @@ class ATLTileCalTBStepAction: public G4UserSteppingAction {
     private:
         ATLTileCalTBEventAction* fEventAction;
 
+	G4int neutronCount = 0;
+	G4int antiNeutronCount = 0;
+	G4int protonCount = 0;
+	G4int antiProtonCount = 0;
+	G4int pionPlusCount = 0;
+	G4int pionMinusCount = 0;
+	G4int electronCount = 0;
+	G4int positronCount = 0;
+	G4int gammaCount = 0;
+	G4int othersCount = 0;
+
 };
 
 #endif //ATLTileCalTBStepAction_h 1

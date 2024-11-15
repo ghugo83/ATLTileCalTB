@@ -25,11 +25,11 @@ ATLTileCalTBPrimaryGenAction::ATLTileCalTBPrimaryGenAction()
     : G4VUserPrimaryGeneratorAction(),
       fParticleGun( nullptr ) {
     
-      fParticleGun = new G4ParticleGun( 1 ); //set primary particle(s) to 1
+      fParticleGun = new G4ParticleGun(); //set primary particle(s) to 1
 
       //default particle gun parameters (can be changed via UI)
       //
-      auto particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle( "pi+" );
+      /*auto particleDefinition = G4ParticleTable::GetParticleTable()->FindParticle( "pi+" );
       fParticleGun->SetParticleDefinition( particleDefinition );
       //fParticleGun->SetParticleEnergy( 10.*GeV );
       fParticleGun->SetParticleEnergy( 30.*GeV );
@@ -38,7 +38,7 @@ ATLTileCalTBPrimaryGenAction::ATLTileCalTBPrimaryGenAction()
 
       //constexpr G4double PrimaryAngle = 76*deg; //set TB angle as on ATLAS reference paper
       //fParticleGun->SetParticleMomentumDirection( G4ThreeVector( sin(PrimaryAngle),0.,cos(PrimaryAngle) ) );
-      fParticleGun->SetParticleMomentumDirection( G4ThreeVector(1.,0.,0.) );
+      fParticleGun->SetParticleMomentumDirection( G4ThreeVector(1.,0.,0.) );*/
 
 }
 

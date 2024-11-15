@@ -151,6 +151,13 @@ int main(int argc, char **argv) {
 std::unique_ptr<G4RunManager> runManager(
 G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly));
 
+
+  G4GDMLParser parser;
+  //parser.Read("TileTB_2B1EB_nobeamline.gdml", false);
+  //parser.Read("TileTB_2B1EB_nobeamline_simplify.gdml", false);
+  parser.Read("iron_rpp.gdml", false);
+  runManager->SetUserInitialization(new ATLTileCalTBDetConstruction(parser));
+
   // Manadatory Geant4 classes
   //
 
@@ -192,11 +199,6 @@ G4RunManagerFactory::CreateRunManager(G4RunManagerType::SerialOnly));
 #endif // #if G4VERSION_NUMBER >= 1110
 #endif // #ifndef G4_USE_FLUKA
 
-  G4GDMLParser parser;
-  //parser.Read("TileTB_2B1EB_nobeamline.gdml", false);
-  //parser.Read("TileTB_2B1EB_nobeamline_simplify.gdml", false);
-  parser.Read("iron_rpp.gdml", false);
-  runManager->SetUserInitialization(new ATLTileCalTBDetConstruction(parser));
 
   // Classes via ActionInitialization
   //
